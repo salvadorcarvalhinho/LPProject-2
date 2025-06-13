@@ -6,8 +6,8 @@ public class ASTLet implements ASTNode {
 
     public IValue eval(Environment<IValue> e) throws InterpreterError {
 	    Environment<IValue> en = e.beginScope();
-        for (Bind b : decls) {
-            en.assoc(b.getId(), b.getExp().eval(en));
+        for (Bind dec : decls) {
+            en.assoc(dec.getId(), dec.getExp().eval(en));
         }
         IValue v = body.eval(en);
         en.endScope();
