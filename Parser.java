@@ -358,34 +358,6 @@ public class Parser implements ParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public ASTNode FunB(String sid) throws ParseException {
-Token n;
-ASTNode t, e1;
-ASTType at;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case COMMA:
-      jj_consume_token(COMMA);
-      n = jj_consume_token(Id);
-      jj_consume_token(COLON);
-      at = Type();
-                                          /*e1 = FunB(n.image); t = new ASTFun(sid,e1);*/ t = null;
-      break;
-    case ARROW:
-      jj_consume_token(ARROW);
-      jj_consume_token(LBRA);
-      e1 = Let();
-      jj_consume_token(RBRA);
-                                     /*t = new ASTFun(sid,e1);*/ t = null;
-      break;
-    default:
-      jj_la1[16] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-    {if (true) return t;}
-    throw new Error("Missing return statement in function");
-  }
-
   static final public ASTNode Fun() throws ParseException {
 Token n;
 ASTNode t, e1=null, e2;
@@ -394,7 +366,7 @@ ASTType at;
     n = jj_consume_token(Id);
     jj_consume_token(COLON);
     at = Type();
-        /*t = new ASTFun(n.image, null); e1 = t;*/ t = null;
+        t = new ASTFun(n.image, null); e1 = t;
     label_9:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -402,20 +374,21 @@ ASTType at;
         ;
         break;
       default:
-        jj_la1[17] = jj_gen;
+        jj_la1[16] = jj_gen;
         break label_9;
       }
       jj_consume_token(COMMA);
       n = jj_consume_token(Id);
       jj_consume_token(COLON);
       at = Type();
-
+                                               e2 = new ASTFun(n.image, null);
+                  ((ASTFun)e1).setBody(e2); e1 = e2;
     }
     jj_consume_token(ARROW);
     jj_consume_token(LBRA);
     e2 = Let();
     jj_consume_token(RBRA);
-                                                     /*((ASTFun)e1).setBody(e2);*/ t = null;
+                                                     ((ASTFun)e1).setBody(e2);
         {if (true) return t;}
     throw new Error("Missing return statement in function");
   }
@@ -502,7 +475,7 @@ ASTType at;
       break;
     case NIL:
       jj_consume_token(NIL);
-              /*t = new ASTNil();*/ t = null;
+             t = new ASTNil();
       break;
     case MATCH:
       jj_consume_token(MATCH);
@@ -521,7 +494,7 @@ ASTType at;
         /*t = new ASTMatch(t,e1,n.image,m.image,e2);*/t = null;
       break;
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[17] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -536,10 +509,10 @@ ASTType at;
     case SARROW:
       jj_consume_token(SARROW);
       t2 = Type();
-                                         /*t1 = new ASTTArrow(t1,t2);*/t1 = null;
+                                         t1 = new ASTTArrow(t1,t2);
       break;
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[18] = jj_gen;
       ;
     }
       {if (true) return t1;}
@@ -564,7 +537,7 @@ ASTType at;
           ;
           break;
         default:
-          jj_la1[20] = jj_gen;
+          jj_la1[19] = jj_gen;
           break label_10;
         }
         jj_consume_token(COMMA);
@@ -575,7 +548,7 @@ ASTType at;
       }
       break;
     default:
-      jj_la1[21] = jj_gen;
+      jj_la1[20] = jj_gen;
       ;
     }
      {if (true) return new TypeBindList(ll);}
@@ -629,7 +602,7 @@ ASTType at;
                                                     t = new ASTTStruct(ll); {if (true) return t;}
       break;
     default:
-      jj_la1[22] = jj_gen;
+      jj_la1[21] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -647,7 +620,7 @@ ASTType at;
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[23];
+  static final private int[] jj_la1 = new int[22];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -655,10 +628,10 @@ ASTType at;
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x49e1,0x20,0x40,0x49e0,0x800000,0x0,0x8000000,0x4000000,0xf0000000,0xf0000000,0xc00,0xc00,0x600000,0x87000,0x87000,0x600000,0x2000000,0x2000000,0x4980,0x0,0x2000000,0x0,0x0,};
+      jj_la1_0 = new int[] {0x49e1,0x20,0x40,0x49e0,0x800000,0x0,0x8000000,0x4000000,0xf0000000,0xf0000000,0xc00,0xc00,0x600000,0x87000,0x87000,0x600000,0x2000000,0x4980,0x0,0x2000000,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x6009ef4,0x0,0x0,0x6009ef4,0x0,0x8,0x0,0x0,0x3,0x3,0x0,0x0,0x0,0x0,0x0,0x0,0x2000,0x0,0x6009ef4,0x4000,0x0,0x2000000,0x2bf0000,};
+      jj_la1_1 = new int[] {0x6009ef4,0x0,0x0,0x6009ef4,0x0,0x8,0x0,0x0,0x3,0x3,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6009ef4,0x4000,0x0,0x2000000,0x2bf0000,};
    }
 
   /** Constructor with InputStream. */
@@ -679,7 +652,7 @@ ASTType at;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -693,7 +666,7 @@ ASTType at;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -710,7 +683,7 @@ ASTType at;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -720,7 +693,7 @@ ASTType at;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -736,7 +709,7 @@ ASTType at;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -745,7 +718,7 @@ ASTType at;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -801,7 +774,7 @@ ASTType at;
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 23; i++) {
+    for (int i = 0; i < 22; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

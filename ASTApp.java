@@ -13,14 +13,10 @@ public class ASTApp implements ASTNode {
     @Override
     public IValue eval(Environment<IValue> env) throws InterpreterError {
         IValue functionValue = function.eval(env);
-        
-        if (!(functionValue instanceof VFunction))
-            throw new InterpreterError("Cannot apply non-function value");
-            
         VFunction func = (VFunction) functionValue;
-        List<IValue> args = new ArrayList<>();
-        args.add(argument.eval(env));
         
-        return func.apply(args);
+        IValue val = argument.eval(env);
+        
+        return func.apply(val);
     }
 }

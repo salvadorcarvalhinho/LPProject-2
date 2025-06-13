@@ -260,20 +260,6 @@ ASTNode Term() :
      { return t1; } 
 }
 
-ASTNode FunB(String sid) : 
-{
-Token n; 
-ASTNode t, e1;
-ASTType at;
-}
-{ (
-  <COMMA> n = <Id>  <COLON> at = Type() { /*e1 = FunB(n.image); t = new ASTFun(sid,e1);*/ t = null;} // TODO:
-  |
-  <ARROW> <LBRA> e1 = Let() <RBRA> { /*t = new ASTFun(sid,e1);*/ t = null;} // TODO:
-  )
-  { return t; } 
-}
-
 ASTNode Fun() : 
 {
 Token n; 
@@ -282,10 +268,10 @@ ASTType at;
 }
 {
       <FN> n=<Id> <COLON> at = Type()
-      { /*t = new ASTFun(n.image, null); e1 = t;*/ t = null;} // TODO:
-      ( <COMMA> n = <Id> <COLON> at = Type() { /*e2 = new ASTFun(n.image, null);
-		  ((ASTFun)e1).setBody(e2); e1 = e2;*/ })*
-		  <ARROW> <LBRA> e2 = Let() <RBRA> { /*((ASTFun)e1).setBody(e2);*/ t = null;} // TODO:
+      { t = new ASTFun(n.image, null); e1 = t;}
+      ( <COMMA> n = <Id> <COLON> at = Type() { e2 = new ASTFun(n.image, null);
+		  ((ASTFun)e1).setBody(e2); e1 = e2; })*
+		  <ARROW> <LBRA> e2 = Let() <RBRA> { ((ASTFun)e1).setBody(e2);}
       { return t; } 
 }
 
@@ -311,7 +297,7 @@ ASTNode Fact() :
     | <PRINT> t=Fact() { t = new ASTPrint(t); }
     | <PRINTLN> t=Fact() { t = new ASTPrintln(t); }
     | <LPAR> t=Let() <RPAR> 
-    | <NIL> { /*t = new ASTNil();*/ t = null;} // TODO:
+    | <NIL> {t = new ASTNil();}
     | <MATCH> t = Let() <LBRA> <NIL> <SARROW> e1 =Let()
       <PIPE> n=<Id> <DCOLON> m=<Id> <SARROW> e2 =Let() <RBRA>
       { /*t = new ASTMatch(t,e1,n.image,m.image,e2);*/t = null;} // TODO:
@@ -324,8 +310,8 @@ ASTType Type() :
   ASTType t1, t2;
 }
 {        
-    t1 = TypeF() (<SARROW> t2 = Type() { /*t1 = new ASTTArrow(t1,t2);*/t1 = null;} )?
-    { return t1; } // TODO:
+    t1 = TypeF() (<SARROW> t2 = Type() { t1 = new ASTTArrow(t1,t2);} )?
+    { return t1; }
 }
 
 TypeBindList LabelList() :

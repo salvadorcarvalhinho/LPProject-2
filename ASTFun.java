@@ -1,15 +1,19 @@
 import java.util.List;
 
 public class ASTFun implements ASTNode {
-    private List<String> parameters;
+    private String arg;
     private ASTNode body;
 
-    public ASTFun(List<String> parameters, ASTNode body) {
-        this.parameters = parameters;
+    public ASTFun(String arg, ASTNode body) {
+        this.arg = arg;
+        this.body = body;
+    }
+
+    public void setBody(ASTNode body) {
         this.body = body;
     }
 
     public IValue eval(Environment<IValue> env) throws InterpreterError {
-        return new VFunction(parameters, body, env);
+        return new VFunction(arg, body, env);
     }
 }
