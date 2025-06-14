@@ -13,4 +13,13 @@ public class ASTWhile implements ASTNode {
         }
         return null;
     }
+
+    public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError {
+        ASTType condType = condition.typeCheck(env);
+        if (!(condType instanceof ASTTBool)) {
+            throw new TypeCheckError("Condition of while loop must be of type bool, found: " + condType);
+        }
+        body.typeCheck(env);
+        return new ASTTUnit();
+    }
 }

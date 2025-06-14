@@ -11,4 +11,10 @@ public class ASTSeq implements ASTNode {
         left.eval(env);
         return right.eval(env);
     }
+
+    public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError {
+        ASTType t = left.typeCheck(env);
+        t = right.typeCheck(env);
+        return t;
+	}
 }

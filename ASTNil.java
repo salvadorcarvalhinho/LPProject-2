@@ -4,4 +4,7 @@ public class ASTNil implements ASTNode {
         return VNil.getval();
     }
     
+    public ASTType typeCheck(Environment<ASTType> e) {
+        return new ASTTList(new ASTTUnit());
+    }
 }

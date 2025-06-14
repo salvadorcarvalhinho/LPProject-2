@@ -10,4 +10,9 @@ public class ASTPrint implements ASTNode {
         System.out.print(v.toStr());
         return v;
     }
+
+    public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError {
+        ASTType t = exp.typeCheck(env);
+        return t;
+	}
 }

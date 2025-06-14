@@ -16,5 +16,12 @@ public class ASTNeg implements ASTNode {
 	exp = e;
     }
 
+	public ASTType typeCheck(Environment<ASTType> e) throws TypeCheckError { // Γ ⊢ -M :
+		ASTType t = exp.typeCheck(e);
+		if (!(t instanceof ASTTInt)) { // Γ ⊢ M : int
+	    	throw new TypeCheckError("Negation operator requires an integer type, found: " + t);
+		}
+		return new ASTTInt(); // Γ ⊢ -M : int
+	}
 }
 

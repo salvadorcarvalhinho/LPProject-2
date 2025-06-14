@@ -19,4 +19,21 @@ public class ASTLet implements ASTNode {
 	    body = b;
     }
 
+    public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError { // Γ ⊢ let x = N in M :
+        Environment<ASTType> en = env.beginScope();
+        for (Bind dec : decls) {
+            ASTType B = dec.getExp().typeCheck(en); // Γ ⊢ N : B
+            try {
+                en.assoc(dec.getId(), B); // Γ, id : B
+            } catch (InterpreterError e) {
+                throw new TypeCheckError("Duplicate identifier: " + dec.getId());
+            }
+        }
+
+        ASTType A = body.typeCheck(en); // Γ, id : B ⊢ M : A
+        en.endScope();
+
+        return A; // Γ ⊢ let x = N in M : A
+    }
+
 }

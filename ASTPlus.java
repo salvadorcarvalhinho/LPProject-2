@@ -21,4 +21,18 @@ public class ASTPlus implements ASTNode {
                 rhs = r;
         }
 
+        public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError { // Γ ⊢ M + N :
+	        ASTType t1 = lhs.typeCheck(env);
+                if (!(t1 instanceof ASTTInt)) { // Γ ⊢ M : int
+                    throw new TypeCheckError("Left operand of plus expression must be of type int, found: " + t1);
+                }
+
+                ASTType t2 = rhs.typeCheck(env);
+                if (!(t2 instanceof ASTTInt)) { // Γ ⊢ N : int
+                    throw new TypeCheckError("Right operand of plus expression must be of type int, found: " + t2);
+                }
+
+                return new ASTTInt(); // Γ ⊢ M + N : int
+	}
+
 }
