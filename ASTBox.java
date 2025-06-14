@@ -14,4 +14,9 @@ public class ASTBox implements ASTNode {
         }
         return new VBox(value);
     }
+
+    public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError { // Γ ⊢ box(M) :
+        ASTType A = node.typeCheck(env); // Γ ⊢ M : A
+        return new ASTTRef(A); // Γ ⊢ box(M) : ref(A)
+    }
 }

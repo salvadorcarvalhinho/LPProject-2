@@ -5,6 +5,10 @@ public class ASTTStruct implements ASTType {
     public ASTTStruct(TypeBindList llp) {
         ll = llp;
     }
+
+    public boolean isSubtypeOf(ASTType other) {
+        return true;
+    }
     
     public String toStr() {
         return "union { ... }";

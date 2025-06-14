@@ -366,7 +366,7 @@ ASTType at;
     n = jj_consume_token(Id);
     jj_consume_token(COLON);
     at = Type();
-        t = new ASTFun(n.image, null); e1 = t;
+        t = new ASTFun(n.image, at, null); e1 = t;
     label_9:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -381,7 +381,7 @@ ASTType at;
       n = jj_consume_token(Id);
       jj_consume_token(COLON);
       at = Type();
-                                               e2 = new ASTFun(n.image, null);
+                                               e2 = new ASTFun(n.image, at, null);
                   ((ASTFun)e1).setBody(e2); e1 = e2;
     }
     jj_consume_token(ARROW);
@@ -491,7 +491,7 @@ ASTType at;
       jj_consume_token(SARROW);
       e2 = Let();
       jj_consume_token(RBRA);
-        /*t = new ASTMatch(t,e1,n.image,m.image,e2);*/t = null;
+        t = new ASTMatch(t,e1,e2,n.image,m.image);
       break;
     default:
       jj_la1[17] = jj_gen;

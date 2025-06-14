@@ -21,4 +21,15 @@ public class ASTDeref implements ASTNode {
         }
     }
     
+    public ASTType typeCheck(Environment<ASTType> e) throws TypeCheckError {
+        ASTType t = node.typeCheck(e);
+        if (!(t instanceof ASTTRef)) { // Γ ⊢ M : ref(A)
+            throw new TypeCheckError("Dereferencing can only be done on boxed types, found: " + t);
+        }
+
+        ASTType A = ((ASTTRef) t).getType();
+
+        return A; // Γ ⊢ !M : A
+    }
+
 }

@@ -39,4 +39,17 @@ public class ASTComp implements ASTNode {
         return new VBool(res);
     }
     
+    public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError { // Γ ⊢ M op N :
+        ASTType t1 = term1.typeCheck(env);
+        if (!(t1 instanceof ASTTInt)) { // Γ ⊢ M : int
+            throw new TypeCheckError("Left operand of comparisson expression must be of type int, found: " + t1);
+        }
+
+        ASTType t2 = term2.typeCheck(env);
+        if (!(t2 instanceof ASTTInt)) { // Γ ⊢ N : int
+            throw new TypeCheckError("Right operand of comparisson expression must be of type int, found: " + t2);
+        }
+        
+        return new ASTTBool(); // Γ ⊢ M op N : bool
+    }
 }

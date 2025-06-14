@@ -26,5 +26,19 @@ public class ASTBExp implements ASTNode {
         }
         return new VBool(res);
     }
+
+    public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError { // Γ ⊢ M op N :
+        ASTType t1 = term1.typeCheck(env);
+        if (!(t1 instanceof ASTTBool)) { // Γ ⊢ M : bool
+            throw new TypeCheckError("Left operand of boolean expression must be of type bool, found: " + t1);
+        }
+
+        ASTType t2 = term2.typeCheck(env);
+        if (!(t2 instanceof ASTTBool)) { // Γ ⊢ M : bool
+            throw new TypeCheckError("Right operand of boolean expression must be of type bool, found: " + t2);
+        }
+        
+        return new ASTTBool(); // Γ ⊢ M op N : bool
+    }
     
 }

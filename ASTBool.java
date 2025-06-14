@@ -9,4 +9,8 @@ class ASTBool implements ASTNode  {
 	    return new VBool(bool);
     }
 
+    public ASTType typeCheck(Environment<ASTType> e) throws TypeCheckError {
+        return new ASTTBool();
+    }
+
 }

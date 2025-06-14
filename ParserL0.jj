@@ -11,9 +11,9 @@ PARSER_END(Parser)
 SKIP :
 {
   " "
-| "\t"
-| "\r"
-| "\n"
+  | "\t"
+  | "\r"
+  | "\n"
 }
 
 TOKEN :
@@ -149,7 +149,7 @@ ASTNode Let() :
       { decls.add(new Bind(n.image,e1)); } )+
         e2 = Seq() { t = new ASTLet(decls, e2); }
     )
-|
+  |
      {  HashMap<String,ASTType> lbl = new  HashMap<String,ASTType>(); }
    ( (<TYPE>  n=<Id>  <EQUAL> t1 = Type() <SEMIC>
       { lbl.put(n.image, t1); } )+
@@ -268,8 +268,8 @@ ASTType at;
 }
 {
       <FN> n=<Id> <COLON> at = Type()
-      { t = new ASTFun(n.image, null); e1 = t;}
-      ( <COMMA> n = <Id> <COLON> at = Type() { e2 = new ASTFun(n.image, null);
+      { t = new ASTFun(n.image, at, null); e1 = t;}
+      ( <COMMA> n = <Id> <COLON> at = Type() { e2 = new ASTFun(n.image, at, null);
 		  ((ASTFun)e1).setBody(e2); e1 = e2; })*
 		  <ARROW> <LBRA> e2 = Let() <RBRA> { ((ASTFun)e1).setBody(e2);}
       { return t; } 
@@ -300,7 +300,7 @@ ASTNode Fact() :
     | <NIL> {t = new ASTNil();}
     | <MATCH> t = Let() <LBRA> <NIL> <SARROW> e1 =Let()
       <PIPE> n=<Id> <DCOLON> m=<Id> <SARROW> e2 =Let() <RBRA>
-      { /*t = new ASTMatch(t,e1,n.image,m.image,e2);*/t = null;} // TODO:
+      { t = new ASTMatch(t,e1,e2,n.image,m.image);}
     )
    { return t; }
 }

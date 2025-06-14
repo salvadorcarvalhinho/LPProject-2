@@ -5,6 +5,13 @@ public class ASTTRef implements ASTType {
     public ASTTRef(ASTType type) {
         this.type = type;
     }
+    public boolean isSubtypeOf(ASTType other) {
+        if (other instanceof ASTTRef) {
+            ASTTRef otherRef = (ASTTRef) other;
+            return this.type.isSubtypeOf(otherRef.getType()) && otherRef.getType().isSubtypeOf(this.type);
+        }
+        return false;
+    }
     
     public ASTType getType() {
         return type;

@@ -8,5 +8,11 @@ public	class ASTTId implements ASTType	{
     public String toStr() {
         return id;
     }
-
-}	
+    public boolean isSubtypeOf(ASTType other) {
+        if (other instanceof ASTTId) {
+            ASTTId otherId = (ASTTId) other;
+            return this.id.equals(otherId.id);
+        }
+        return false;
+    }
+}

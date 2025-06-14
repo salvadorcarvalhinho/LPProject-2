@@ -5,6 +5,18 @@ public class ASTTList implements ASTType {
     {
         elt = eltt;
     }
+
+    public ASTType getElementType() {
+        return elt;
+    }
+
+    public boolean isSubtypeOf(ASTType other) {
+        if (other instanceof ASTTList) {
+            ASTTList otherList = (ASTTList) other;
+            return this.elt.isSubtypeOf(otherList.elt);
+        }
+        return false;
+    }
     
     public String toStr() {
         return "list<"+elt.toStr()+">";
