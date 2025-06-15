@@ -7,11 +7,6 @@ public class ASTBox implements ASTNode {
 
     public IValue eval(Environment<IValue> env) throws InterpreterError {
         IValue value = node.eval(env);
-        if (!(value instanceof VInt) && !(value instanceof VBool) && 
-        !(value instanceof VFunction) && !(value instanceof VCons) &&
-        !(value instanceof VLCons)) {
-            throw new InterpreterError("Boxing only supports integers, booleans, and functions");
-        }
         return new VBox(value);
     }
 

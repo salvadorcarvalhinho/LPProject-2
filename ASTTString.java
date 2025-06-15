@@ -13,4 +13,7 @@ public class ASTTString implements ASTType {
         return "string";
     }
 
+    public ASTType simplify(Environment<ASTType> env) {
+        return this;
+    }
 }

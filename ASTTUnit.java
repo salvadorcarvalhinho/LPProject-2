@@ -11,4 +11,7 @@ class ASTTUnit implements ASTType {
     public String toStr() {
         return "()";
     }
+    public ASTType simplify(Environment<ASTType> env) {
+        return this;
+    }
 }

@@ -20,4 +20,9 @@ public class ASTTRef implements ASTType {
         return "ref<"+type.toStr()+">";
     }
 
+    public ASTType simplify(Environment<ASTType> env) {
+        ASTType simplifiedType = type.simplify(env);
+        return new ASTTRef(simplifiedType);
+    }
+
 }

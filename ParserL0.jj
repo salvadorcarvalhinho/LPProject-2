@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Parser {
 
-} // TODO: review ASTTId manage and if sometimes is no overly complicated
+}
 
 PARSER_END(Parser)
 
@@ -121,6 +121,8 @@ TOKEN :
   |
   <STRUCT  : "struct">  
   |
+  < Label: "#" (["a"-"z","A"-"Z"])+ >
+  |
   < String: "\"" ( (~["\"","\\"]) | ("\\" ( ["n","t","b","r","f","\\","\""] ) ) )* "\"" >
   |
   < Id: ["a"-"z","A"-"Z","_"] ( ["_","a"-"z","A"-"Z","0"-"9"] )* >
@@ -152,7 +154,7 @@ ASTNode Let() :
         )
       | (
           <TYPE> n=<Id> <EQUAL> at = Type() <SEMIC>
-          { types.put(n.image, at); }
+          { types.put(n.image, at); at = null;}
         )
       )*
       body = Seq()
@@ -251,7 +253,7 @@ ASTNode Term() :
 		 |
 		 op=<DIV> t2 = Fact()  { t1 = new ASTDiv(t1,t2); }
      |
-		 op=<DOT> op = <Id>  { /* to be done field selection */ ; }
+		 op=<DOT> op = <Label>  { t1 = new ASTFieldSelect(t1, op.image) ; }
 		 |
 		 op = <LPAR> t2 = Let ()
 		      <RPAR> { t1 = new ASTApp(t1,t2); } 
@@ -301,6 +303,11 @@ ASTNode Fact() :
     | <MATCH> t = Let() <LBRA> <NIL> <SARROW> e1 =Let()
       <PIPE> n=<Id> <DCOLON> m=<Id> <SARROW> e2 =Let() <RBRA>
       { t = new ASTMatch(t,e1,e2,n.image,m.image);}
+    | <LBRA> {HashMap<String, ASTNode> fields = new HashMap<String, ASTNode>();} (
+        n = <Label> <EQUAL> e1 = Term() {fields.put(n.image, e1);}
+        ( <COMMA> n = <Label> <EQUAL> e1 = Term() { fields.put(n.image, e1); } )*
+      )? <RBRA> { t = new ASTStruct(fields);}
+    | <UNIT> {t = new ASTUnit();}
     )
    { return t; }
 }
@@ -321,8 +328,8 @@ TypeBindList LabelList() :
   Token n;
 }
 {   { ll = new HashMap<String,ASTType>() ; }
-    ( n=<Id>  <COLON> t = Type() { ll.put(n.image,t);}
-              (<COMMA> n=<Id>  <COLON> t = Type() { ll.put(n.image,t);} )*
+    ( n=<Label>  <COLON> t = Type() { ll.put(n.image,t);}
+              (<COMMA> n=<Label>  <COLON> t = Type() { ll.put(n.image,t);} )*
     )?
     {return new TypeBindList(ll);}
 }
@@ -342,7 +349,7 @@ ASTType TypeF() :
         | <STRING> { t = new ASTTString(); } 
         | <REF> <LT> t=Type() <GT> { t = new ASTTRef(t); }
         | <LIST> <LT> t=Type() <GT> { t = new ASTTList(t); }
-        | <STRUCT> <LBRA> ll = LabelList() <RBRA> { t = new ASTTStruct(ll); return t; }
+        | <STRUCT> <LBRA> ll = LabelList() <RBRA> { t = new ASTTStruct(ll);}
         | <LPAR> t = Type() <RPAR>
     )
     { return t; }

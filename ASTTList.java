@@ -21,5 +21,9 @@ public class ASTTList implements ASTType {
     public String toStr() {
         return "list<"+elt.toStr()+">";
     }
-    
+
+    public ASTType simplify(Environment<ASTType> env) {
+        ASTType simplifiedElt = elt.simplify(env);
+        return new ASTTList(simplifiedElt);
+    }    
 }

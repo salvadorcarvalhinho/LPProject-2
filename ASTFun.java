@@ -5,9 +5,6 @@ public class ASTFun implements ASTNode {
 
     public ASTFun(String arg, ASTType arg_type, ASTNode body) {
         this.arg = arg;
-        if (arg_type instanceof ASTTId) {
-            arg_type = ((ASTTId) arg_type).simplify(null);
-        }
         this.arg_type = arg_type;
         this.body = body;
     }
@@ -22,6 +19,7 @@ public class ASTFun implements ASTNode {
 
     public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError { // Γ ⊢ λx:A.M : A → B
         Environment<ASTType> newEnv = env.beginScope();
+        arg_type = arg_type.simplify(newEnv);
         try {
             newEnv.assoc(arg, arg_type); // Γ, x:A
         } catch (InterpreterError e) {

@@ -9,6 +9,10 @@ public class ASTTInt implements ASTType {
         }
         return false;
     }
+
+    public ASTType simplify(Environment<ASTType> env) {
+        return this;
+    }
 }
 
 

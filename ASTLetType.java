@@ -30,9 +30,7 @@ public class ASTLetType implements ASTNode {
         for (Map.Entry<String, ASTType> entry : types.entrySet()) {
             String name = entry.getKey();
             ASTType type = entry.getValue();
-            if (type instanceof ASTTId) {
-                type = ((ASTTId)type).simplify(en);
-            }
+            type = type.simplify(en);
             try {
                 en.assoc(name, type);
             } catch (InterpreterError e) {
@@ -45,9 +43,7 @@ public class ASTLetType implements ASTNode {
             ASTNode exp = b.getExp();
             ASTType type = b.getType();
             if (type != null) {
-                if (type instanceof ASTTId) {
-                    type = ((ASTTId)type).simplify(en);
-                }
+                type = type.simplify(en);
                 try {
                     en.assoc(id, type); // Γ, id : B
                 } catch (InterpreterError e) {

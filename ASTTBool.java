@@ -12,4 +12,8 @@ class ASTTBool implements ASTType {
         }
         return false;
     }
+
+    public ASTType simplify(Environment<ASTType> env) {
+        return this;
+    }
 }

@@ -25,6 +25,14 @@ public class ASTTArrow implements ASTType {
 
     public String toStr() {
         return arg.toStr()+"->"+ret.toStr();
-    }   
+    }
+
+    public ASTType simplify(Environment<ASTType> env) {
+        ASTType simplifiedArg = arg.simplify(env);
+        ASTType simplifiedRet = ret.simplify(env);
+        return new ASTTArrow(simplifiedArg, simplifiedRet);
+    }
+
+
 }
 
