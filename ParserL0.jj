@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Parser {
 
-}
+} // TODO: review ASTTId manage and if sometimes is no overly complicated
 
 PARSER_END(Parser)
 
@@ -136,28 +136,28 @@ ASTNode Start():
 }
 
 ASTNode Let() :
-{ Token n; 
-  ASTNode t, e1, e2;
-  ASTType t1;
+{
+  Token n;
+  ASTNode e1, body;
+  ASTType at=null;
+  List<Bind> decls = new ArrayList<Bind>();
+  HashMap<String, ASTType> types = new HashMap<String, ASTType>();
 }
-{ 
+{
     (
-    t = Seq()
-    |
-    {  List<Bind> decls  = new ArrayList<Bind>(); }
-    ( (<LET>  n=<Id>  <EQUAL> e1 = BA() <SEMIC>
-      { decls.add(new Bind(n.image,e1)); } )+
-        e2 = Seq() { t = new ASTLet(decls, e2); }
+      (
+        (
+          <LET> n=<Id> [<COLON> at = Type()] <EQUAL> e1 = BA() <SEMIC>
+          { decls.add(new Bind(n.image, e1, at)); at = null;}
+        )
+      | (
+          <TYPE> n=<Id> <EQUAL> at = Type() <SEMIC>
+          { types.put(n.image, at); }
+        )
+      )*
+      body = Seq()
+      { return new ASTLetType(decls, types, body); }
     )
-  |
-     {  HashMap<String,ASTType> lbl = new  HashMap<String,ASTType>(); }
-   ( (<TYPE>  n=<Id>  <EQUAL> t1 = Type() <SEMIC>
-      { lbl.put(n.image, t1); } )+
-        e2 = Seq() { t = new ASTTypeDef(lbl, e2); }
-    )
-
-    )
-   { return t; }
 }
 
 ASTNode Seq() :
@@ -343,6 +343,7 @@ ASTType TypeF() :
         | <REF> <LT> t=Type() <GT> { t = new ASTTRef(t); }
         | <LIST> <LT> t=Type() <GT> { t = new ASTTList(t); }
         | <STRUCT> <LBRA> ll = LabelList() <RBRA> { t = new ASTTStruct(ll); return t; }
+        | <LPAR> t = Type() <RPAR>
     )
     { return t; }
 }

@@ -6,7 +6,7 @@ public class ASTTStruct implements ASTType {
         ll = llp;
     }
 
-    public boolean isSubtypeOf(ASTType other) {
+    public boolean isSubtypeOf(ASTType other, Environment<ASTType> env) {
         return true;
     }
     

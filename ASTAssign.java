@@ -25,7 +25,7 @@ public class ASTAssign implements ASTNode {
         
         
         ASTType A = node2.typeCheck(e); // Γ ⊢ N : A
-        if (!A.isSubtypeOf(ref_A.getType())) {
+        if (!A.isSubtypeOf(ref_A.getType(), e)) {
             throw new TypeCheckError("Right-hand side type " + A + " is not a subtype of reference type " + ref_A.getType());
         }
 

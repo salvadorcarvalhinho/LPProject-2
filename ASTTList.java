@@ -10,10 +10,10 @@ public class ASTTList implements ASTType {
         return elt;
     }
 
-    public boolean isSubtypeOf(ASTType other) {
+    public boolean isSubtypeOf(ASTType other, Environment<ASTType> env) {
         if (other instanceof ASTTList) {
             ASTTList otherList = (ASTTList) other;
-            return this.elt.isSubtypeOf(otherList.elt);
+            return this.elt.isSubtypeOf(otherList.elt, env);
         }
         return false;
     }

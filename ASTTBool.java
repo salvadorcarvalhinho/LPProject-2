@@ -6,7 +6,7 @@ class ASTTBool implements ASTType {
         return "bool";
     }
 
-    public boolean isSubtypeOf(ASTType other) {
+    public boolean isSubtypeOf(ASTType other, Environment<ASTType> env) {
         if (other instanceof ASTTBool) {
             return true;
         }

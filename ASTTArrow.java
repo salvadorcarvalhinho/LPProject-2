@@ -15,10 +15,10 @@ public class ASTTArrow implements ASTType {
         return ret;
     }
 
-    public boolean isSubtypeOf(ASTType other) {
+    public boolean isSubtypeOf(ASTType other, Environment<ASTType> env) {
         if (other instanceof ASTTArrow) {
             ASTTArrow otherArrow = (ASTTArrow) other;
-            return otherArrow.getArgType().isSubtypeOf(arg) && ret.isSubtypeOf(otherArrow.getRetType());
+            return otherArrow.getArgType().isSubtypeOf(arg, env) && ret.isSubtypeOf(otherArrow.getRetType(), env);
         }
         return false;
     }

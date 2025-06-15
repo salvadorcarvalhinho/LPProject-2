@@ -5,6 +5,9 @@ public class ASTFun implements ASTNode {
 
     public ASTFun(String arg, ASTType arg_type, ASTNode body) {
         this.arg = arg;
+        if (arg_type instanceof ASTTId) {
+            arg_type = ((ASTTId) arg_type).simplify(null);
+        }
         this.arg_type = arg_type;
         this.body = body;
     }

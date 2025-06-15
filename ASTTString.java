@@ -2,7 +2,7 @@ public class ASTTString implements ASTType {
 
     public ASTTString() {}
 
-    public boolean isSubtypeOf(ASTType other) {
+    public boolean isSubtypeOf(ASTType other, Environment<ASTType> env) {
         if (other instanceof ASTTString) {
             return true;
         }

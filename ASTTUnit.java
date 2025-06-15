@@ -2,7 +2,7 @@ class ASTTUnit implements ASTType {
         
     public ASTTUnit() {
     }
-    public boolean isSubtypeOf(ASTType other) {
+    public boolean isSubtypeOf(ASTType other, Environment<ASTType> env) {
         if (other instanceof ASTTUnit) {
             return true;
         }

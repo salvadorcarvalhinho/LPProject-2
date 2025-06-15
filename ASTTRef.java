@@ -5,10 +5,10 @@ public class ASTTRef implements ASTType {
     public ASTTRef(ASTType type) {
         this.type = type;
     }
-    public boolean isSubtypeOf(ASTType other) {
+    public boolean isSubtypeOf(ASTType other, Environment<ASTType> env) {
         if (other instanceof ASTTRef) {
             ASTTRef otherRef = (ASTTRef) other;
-            return this.type.isSubtypeOf(otherRef.getType()) && otherRef.getType().isSubtypeOf(this.type);
+            return this.type.isSubtypeOf(otherRef.getType(), env) && otherRef.getType().isSubtypeOf(this.type, env);
         }
         return false;
     }

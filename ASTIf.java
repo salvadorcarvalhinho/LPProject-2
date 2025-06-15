@@ -27,7 +27,7 @@ public class ASTIf implements ASTNode {
         ASTType then_A = thenBranch.typeCheck(env); // Γ ⊢ N : A
         ASTType else_A = elseBranch.typeCheck(env); // Γ ⊢ R : A 
 
-        if (!then_A.isSubtypeOf(else_A)) {
+        if (!then_A.isSubtypeOf(else_A, env)) {
             throw new TypeCheckError("Branches of if must have the same type, found: " + then_A + " and " + else_A);
         }
 

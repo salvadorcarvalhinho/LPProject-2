@@ -26,12 +26,12 @@ public class ASTApp implements ASTNode {
 
         ASTType funcType = function.typeCheck(env);
         if (!(funcType instanceof ASTTArrow)) { // Γ ⊢ M : A → B
-            throw new TypeCheckError("Expected a function type, but found: " + funcType);
+            throw new TypeCheckError("Expected a function type, but found: " + funcType.toStr());
         }
         ASTTArrow A_arrow_B = (ASTTArrow) funcType;
 
-        if (!C.isSubtypeOf(A_arrow_B.getArgType())) { // C <: A
-            throw new TypeCheckError("Argument type " + C + " does not match function's expected argument type " + A_arrow_B.getArgType());
+        if (!C.isSubtypeOf(A_arrow_B.getArgType(), env)) { // C <: A
+            throw new TypeCheckError("Argument type " + C.toStr() + " does not match function's expected argument type " + A_arrow_B.getArgType().toStr());
         }
         
         return A_arrow_B.getRetType(); // Γ ⊢ MN : B

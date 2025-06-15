@@ -8,11 +8,25 @@ public	class ASTTId implements ASTType	{
     public String toStr() {
         return id;
     }
-    public boolean isSubtypeOf(ASTType other) {
-        if (other instanceof ASTTId) {
-            ASTTId otherId = (ASTTId) other;
-            return this.id.equals(otherId.id);
+
+    public ASTType simplify(Environment<ASTType> env) {
+        try {
+            ASTType type = env.find(id);
+            while (type instanceof ASTTId) {
+                type = env.find(((ASTTId) type).toStr());
+            }
+            return type;
+        } catch (InterpreterError e) {
+            return this; // If not found, return itself
         }
-        return false;
+    }
+
+    public boolean isSubtypeOf(ASTType other, Environment<ASTType> env) {
+        try {
+            ASTType type = env.find(id);
+            return type.isSubtypeOf(other, env);
+        } catch (InterpreterError e) {
+            return false;
+        }
     }
 }

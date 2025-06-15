@@ -57,7 +57,7 @@ public class ASTMatch implements ASTNode {
         }
         ASTType cons_C = cons.typeCheck(env); // Γ, x : A, y : list(A) ⊢ R : C
 
-        if (!nil_C.isSubtypeOf(cons_C)) {
+        if (!nil_C.isSubtypeOf(cons_C, e)) {
             throw new TypeCheckError("Branches of match must have the same type, found: " + nil_C + " and " + cons_C);
         }
 
