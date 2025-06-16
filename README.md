@@ -1,7 +1,7 @@
 Programing Languages 2024/2025
-# Phase 1 - L1++ Code Implementation
+# Phase 2 - X++ Code Implementation
 
-This repository contains an interpreter for L1++, a small functional programming language with mutable state and lazy evaluation capabilities. L1++ features include variables, functions with closures, control structures, mutable boxes, and both strict and lazy lists.
+This repository contains an interpreter for X++, a small functional programming language with mutable state and lazy evaluation capabilities. X++ features include variables, functions with closures, control structures, mutable boxes, and both strict and lazy lists.
 
 ## Features
 
@@ -12,6 +12,8 @@ This repository contains an interpreter for L1++, a small functional programming
 - Mutable state with boxes (box, deref, assign)
 - Lists (both strict and lazy lists with `::` and `:?`)
 - Pattern matching with match expressions
+- Type checking support
+- Recursive types support
 
 ## Building the Project
 
@@ -34,13 +36,18 @@ If you need to clean up compiled files without rebuilding, run:
 
 ## Running the Interpreter
 
-After building the project, run the L0 interpreter:
+After building the project, run the X++ interpreter:
 
 ```bash
-java L0int
+./x++.sh
 ```
 
 This will start an interactive REPL (Read-Eval-Print Loop) where you can enter expressions, terminated with `;;`. The result of evaluating the expressions will be printed after each entry.
+
+If you prefer, you van also run a program using:
+```bash
+./x++.sh test_name.txt
+```
 
 ## License
 
