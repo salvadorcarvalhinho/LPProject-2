@@ -11,9 +11,21 @@ PARSER_END(Parser)
 SKIP :
 {
   " "
-  | "\t"
-  | "\r"
-  | "\n"
+| "\t"
+| "\r"
+| "\n"
+}
+
+SKIP :
+{
+    "/*" : IN_COMMENT
+}
+
+<IN_COMMENT>
+SKIP :
+{
+    < ~[] >
+|   "*/" : DEFAULT
 }
 
 TOKEN :
@@ -143,7 +155,7 @@ ASTNode Let() :
   ASTNode e1, body;
   ASTType at=null;
   List<Bind> decls = new ArrayList<Bind>();
-  HashMap<String, ASTType> types = new HashMap<String, ASTType>();
+  List<Bind> types = new ArrayList<Bind>();
 }
 {
     (
@@ -154,7 +166,7 @@ ASTNode Let() :
         )
       | (
           <TYPE> n=<Id> <EQUAL> at = Type() <SEMIC>
-          { types.put(n.image, at); at = null;}
+          { types.add(new Bind (n.image, null, at)); at = null;}
         )
       )*
       body = Seq()
@@ -242,24 +254,34 @@ ASTNode Term() :
 {Token op;
   ASTNode t1, t2;}
 {
-     t1 = Fact() (
+     t1 = FieldSelection() (
      (op=<DCOLON> | op=<LCOLON>) t2 = Term() 
      { if (op.kind==DCOLON)
       {t1 = new ASTCons(t1,t2, false);}
       else {t1 = new ASTCons(t1,t2, true);}}
 		 |
      (
-     op=<STAR> t2 = Fact()   { t1 = new ASTMult(t1,t2); }
+     op=<STAR> t2 = FieldSelection()   { t1 = new ASTMult(t1,t2); }
 		 |
-		 op=<DIV> t2 = Fact()  { t1 = new ASTDiv(t1,t2); }
+		 op=<DIV> t2 = FieldSelection()  { t1 = new ASTDiv(t1,t2); }
      |
-		 op=<DOT> op = <Label>  { t1 = new ASTFieldSelect(t1, op.image) ; }
+     op=<UNIT> {t1 = new ASTApp(t1, new ASTUnit());}  
 		 |
 		 op = <LPAR> t2 = Let ()
 		      <RPAR> { t1 = new ASTApp(t1,t2); } 
 		)*
     )
      { return t1; } 
+}
+
+ASTNode FieldSelection() :
+{Token op;
+  ASTNode t1, t2;}
+{
+  t1 = Fact() (
+      op=<DOT> op = <Label> { t1 = new ASTFieldSelect(t1, op.image); }
+  )*
+  { return t1; }
 }
 
 ASTNode Fun() : 
@@ -289,6 +311,7 @@ ASTNode Fact() :
     | n=<TRUE> { t = new ASTBool(true);}
     | n=<FALSE> { t = new ASTBool(false);}
     | n=<Id>  { t = new ASTId(n.image); }
+    | n = <Label> <LPAR> e1 = Term() <RPAR> { t = new ASTUnion(n.image, e1);}
     | <BOX> t=Fact() { t = new ASTBox(t); }
     | <DEREF> t=Fact() { t = new ASTDeref(t); }
     | <MINUS> t=Fact() { t = new ASTNeg(t); }
@@ -300,9 +323,37 @@ ASTNode Fact() :
     | <PRINTLN> t=Fact() { t = new ASTPrintln(t); }
     | <LPAR> t=Let() <RPAR> 
     | <NIL> {t = new ASTNil();}
-    | <MATCH> t = Let() <LBRA> <NIL> <SARROW> e1 =Let()
-      <PIPE> n=<Id> <DCOLON> m=<Id> <SARROW> e2 =Let() <RBRA>
-      { t = new ASTMatch(t,e1,e2,n.image,m.image);}
+    | <MATCH> t = Let() <LBRA>
+      {
+        ArrayList<String> labels = new ArrayList<String>();
+        ArrayList<String> vars = new ArrayList<String>();
+        ArrayList<ASTNode> bodies = new ArrayList<ASTNode>();
+      }
+      (
+        <NIL> <SARROW> e1 =Let()
+        <PIPE> n=<Id> <DCOLON> m=<Id> <SARROW> e2 =Let() <RBRA>
+        { t = new ASTMatch(t,e1,e2,n.image,m.image);}
+      |
+        n = <Label> <LPAR> m = <Id> <RPAR> <SARROW> e1=Let()
+        {
+          labels = new ArrayList<String>();
+          vars = new ArrayList<String>();
+          bodies = new ArrayList<ASTNode>();
+          labels.add(n.image);
+          vars.add(m.image);
+          bodies.add(e1);
+        }
+        (
+          <PIPE> n = <Label> <LPAR> m = <Id> <RPAR> <SARROW> e2 = Let()
+          {
+            labels.add(n.image);
+            vars.add(m.image);
+            bodies.add(e2);
+          }
+        )*
+        <RBRA>
+        { t = new ASTUnionMatch(t, labels, vars, bodies); }
+      )
     | <LBRA> {HashMap<String, ASTNode> fields = new HashMap<String, ASTNode>();} (
         n = <Label> <EQUAL> e1 = Term() {fields.put(n.image, e1);}
         ( <COMMA> n = <Label> <EQUAL> e1 = Term() { fields.put(n.image, e1); } )*
@@ -350,6 +401,7 @@ ASTType TypeF() :
         | <REF> <LT> t=Type() <GT> { t = new ASTTRef(t); }
         | <LIST> <LT> t=Type() <GT> { t = new ASTTList(t); }
         | <STRUCT> <LBRA> ll = LabelList() <RBRA> { t = new ASTTStruct(ll);}
+        | <UNION> <LBRA> ll = LabelList() <RBRA> { t = new ASTTUnion(ll);}
         | <LPAR> t = Type() <RPAR>
     )
     { return t; }

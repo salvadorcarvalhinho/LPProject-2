@@ -4,10 +4,10 @@ import java.util.HashMap;
 
 public class ASTLetType implements ASTNode {
     private List<Bind> decls;
-    private HashMap<String, ASTType> types;
+    private List<Bind> types;
     private ASTNode body;
 
-    public ASTLetType(List<Bind> decls, HashMap<String, ASTType> types, ASTNode body) {
+    public ASTLetType(List<Bind> decls, List<Bind> types, ASTNode body) {
         this.decls = decls;
         this.types = types;
         this.body = body;
@@ -27,9 +27,9 @@ public class ASTLetType implements ASTNode {
 
     public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError {
         Environment<ASTType> en = env.beginScope();
-        for (Map.Entry<String, ASTType> entry : types.entrySet()) {
-            String name = entry.getKey();
-            ASTType type = entry.getValue();
+        for (Bind b : types) {
+            String name = b.getId();
+            ASTType type = b.getType();
             type = type.simplify(en);
             try {
                 en.assoc(name, type);

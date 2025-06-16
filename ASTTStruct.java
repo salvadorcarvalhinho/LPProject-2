@@ -41,7 +41,13 @@ public class ASTTStruct implements ASTType {
     }
     
     public String toStr() {
-        return "union { ... }";
+        StringBuilder strBuilder = new StringBuilder();
+        strBuilder.append("struct { ");
+        for (String field : ll.getFields()) {
+            strBuilder.append(field).append(" : ").append(ll.get(field).toStr()).append("; ");
+        }
+        strBuilder.append("}");
+        return strBuilder.toString();
     }
 
     public ASTType simplify(Environment<ASTType> env) {

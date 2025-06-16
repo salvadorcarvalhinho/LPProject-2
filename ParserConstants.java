@@ -9,118 +9,120 @@ public interface ParserConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int LET = 5;
+  int LET = 8;
   /** RegularExpression Id. */
-  int TYPE = 6;
+  int TYPE = 9;
   /** RegularExpression Id. */
-  int TRUE = 7;
+  int TRUE = 10;
   /** RegularExpression Id. */
-  int FALSE = 8;
+  int FALSE = 11;
   /** RegularExpression Id. */
-  int PIPE = 9;
+  int PIPE = 12;
   /** RegularExpression Id. */
-  int PLUS = 10;
+  int PLUS = 13;
   /** RegularExpression Id. */
-  int MINUS = 11;
+  int MINUS = 14;
   /** RegularExpression Id. */
-  int STAR = 12;
+  int STAR = 15;
   /** RegularExpression Id. */
-  int DIV = 13;
+  int DIV = 16;
   /** RegularExpression Id. */
-  int LPAR = 14;
+  int LPAR = 17;
   /** RegularExpression Id. */
-  int RPAR = 15;
+  int RPAR = 18;
   /** RegularExpression Id. */
-  int LBRA = 16;
+  int LBRA = 19;
   /** RegularExpression Id. */
-  int RBRA = 17;
+  int RBRA = 20;
   /** RegularExpression Id. */
-  int EQUAL = 18;
+  int EQUAL = 21;
   /** RegularExpression Id. */
-  int DOT = 19;
+  int DOT = 22;
   /** RegularExpression Id. */
-  int COLON = 20;
+  int COLON = 23;
   /** RegularExpression Id. */
-  int DCOLON = 21;
+  int DCOLON = 24;
   /** RegularExpression Id. */
-  int LCOLON = 22;
+  int LCOLON = 25;
   /** RegularExpression Id. */
-  int SEMIC = 23;
+  int SEMIC = 26;
   /** RegularExpression Id. */
-  int TERM = 24;
+  int TERM = 27;
   /** RegularExpression Id. */
-  int COMMA = 25;
+  int COMMA = 28;
   /** RegularExpression Id. */
-  int AND = 26;
+  int AND = 29;
   /** RegularExpression Id. */
-  int OR = 27;
+  int OR = 30;
   /** RegularExpression Id. */
-  int EQ = 28;
+  int EQ = 31;
   /** RegularExpression Id. */
-  int GT = 29;
+  int GT = 32;
   /** RegularExpression Id. */
-  int LT = 30;
+  int LT = 33;
   /** RegularExpression Id. */
-  int GE = 31;
+  int GE = 34;
   /** RegularExpression Id. */
-  int LE = 32;
+  int LE = 35;
   /** RegularExpression Id. */
-  int NEQ = 33;
+  int NEQ = 36;
   /** RegularExpression Id. */
-  int NOT = 34;
+  int NOT = 37;
   /** RegularExpression Id. */
-  int ASSIGN = 35;
+  int ASSIGN = 38;
   /** RegularExpression Id. */
-  int BOX = 36;
+  int BOX = 39;
   /** RegularExpression Id. */
-  int NIL = 37;
+  int NIL = 40;
   /** RegularExpression Id. */
-  int DEREF = 38;
+  int DEREF = 41;
   /** RegularExpression Id. */
-  int IF = 39;
+  int IF = 42;
   /** RegularExpression Id. */
-  int ELSE = 40;
+  int ELSE = 43;
   /** RegularExpression Id. */
-  int WHILE = 41;
+  int WHILE = 44;
   /** RegularExpression Id. */
-  int PRINT = 42;
+  int PRINT = 45;
   /** RegularExpression Id. */
-  int PRINTLN = 43;
+  int PRINTLN = 46;
   /** RegularExpression Id. */
-  int FN = 44;
+  int FN = 47;
   /** RegularExpression Id. */
-  int ARROW = 45;
+  int ARROW = 48;
   /** RegularExpression Id. */
-  int SARROW = 46;
+  int SARROW = 49;
   /** RegularExpression Id. */
-  int MATCH = 47;
+  int MATCH = 50;
   /** RegularExpression Id. */
-  int INT = 48;
+  int INT = 51;
   /** RegularExpression Id. */
-  int UNIT = 49;
+  int UNIT = 52;
   /** RegularExpression Id. */
-  int BOOL = 50;
+  int BOOL = 53;
   /** RegularExpression Id. */
-  int STRING = 51;
+  int STRING = 54;
   /** RegularExpression Id. */
-  int LIST = 52;
+  int LIST = 55;
   /** RegularExpression Id. */
-  int REF = 53;
+  int REF = 56;
   /** RegularExpression Id. */
-  int UNION = 54;
+  int UNION = 57;
   /** RegularExpression Id. */
-  int STRUCT = 55;
+  int STRUCT = 58;
   /** RegularExpression Id. */
-  int Label = 56;
+  int Label = 59;
   /** RegularExpression Id. */
-  int String = 57;
+  int String = 60;
   /** RegularExpression Id. */
-  int Id = 58;
+  int Id = 61;
   /** RegularExpression Id. */
-  int Num = 59;
+  int Num = 62;
 
   /** Lexical state. */
   int DEFAULT = 0;
+  /** Lexical state. */
+  int IN_COMMENT = 1;
 
   /** Literal token values. */
   String[] tokenImage = {
@@ -129,6 +131,9 @@ public interface ParserConstants {
     "\"\\t\"",
     "\"\\r\"",
     "\"\\n\"",
+    "\"/*\"",
+    "<token of kind 6>",
+    "\"*/\"",
     "\"let\"",
     "\"type\"",
     "\"true\"",

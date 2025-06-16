@@ -12,8 +12,16 @@ public class TypeBindList  {
                 return lbl.get(id);
         }
 
+        public void set(String id, ASTType t) {
+                lbl.put(id, t);
+        }
+
         public List<String> getFields() {
                 return new ArrayList<>(lbl.keySet());
+        }
+
+        public List<ASTType> getFieldTypes() {
+                return new ArrayList<>(lbl.values());
         }
 
         public TypeBindList simplify(Environment<ASTType> env) {
