@@ -23,14 +23,4 @@ public class TypeBindList  {
         public List<ASTType> getFieldTypes() {
                 return new ArrayList<>(lbl.values());
         }
-
-        public TypeBindList simplify(Environment<ASTType> env) {
-                HashMap<String, ASTType> simplifiedMap = new HashMap<>();
-                for (Map.Entry<String, ASTType> entry : lbl.entrySet()) {
-                        String key = entry.getKey();
-                        ASTType value = entry.getValue().simplify(env);
-                        simplifiedMap.put(key, value);
-                }
-                return new TypeBindList(simplifiedMap);
-        }
 }

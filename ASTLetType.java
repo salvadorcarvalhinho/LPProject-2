@@ -1,6 +1,10 @@
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class ASTLetType implements ASTNode {
     private List<Bind> decls;
@@ -29,9 +33,18 @@ public class ASTLetType implements ASTNode {
         Environment<ASTType> en = env.beginScope();
         for (Bind b : types) {
             String name = b.getId();
-            ASTType type = b.getType();
-            type = type.simplify(en);
             try {
+                en.assoc(name, new ASTTId(name));
+            } catch (InterpreterError e) {
+                throw new TypeCheckError("Duplicate identifier: " + name);
+            }
+        }
+
+        for (Bind b : types) {
+            String name = b.getId();
+            ASTType type = b.getType();
+            try {
+                type = type.simplify(en, new HashSet<String>(Collections.singleton(name)));
                 en.assoc(name, type);
             } catch (InterpreterError e) {
                 throw new TypeCheckError("Duplicate identifier: " + name);
@@ -43,8 +56,8 @@ public class ASTLetType implements ASTNode {
             ASTNode exp = b.getExp();
             ASTType type = b.getType();
             if (type != null) {
-                type = type.simplify(en);
                 try {
+                    type = type.simplify(en, new HashSet<>());
                     en.assoc(id, type); // Γ, id : B
                 } catch (InterpreterError e) {
                     throw new TypeCheckError("Duplicate identifier: " + id);

@@ -1,4 +1,6 @@
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ASTTUnion implements ASTType {
 
@@ -51,17 +53,26 @@ public class ASTTUnion implements ASTType {
                 }
             }
             return true;
+        } else if (other instanceof ASTTId) {
+            ASTTId otherId = (ASTTId) other;
+            try {
+                other = e.find(otherId.toStr());
+            } catch (InterpreterError ex) {
+                return false;
+            }
+            return this.isSubtypeOf(other, e);
         }
 
         return false;
     }
 
-    public ASTType simplify(Environment<ASTType> env) {
+    public ASTType simplify(Environment<ASTType> env, Set<String> simplified) throws InterpreterError {
         for (String field : ll.getFields()) {
             ASTType fieldType = ll.get(field);
-            ASTType simplifiedFieldType = fieldType.simplify(env);
+            ASTType simplifiedFieldType = fieldType.simplify(env, new HashSet<String>(simplified));
             ll.set(field, simplifiedFieldType);
         }
+
         return this;
     }
 

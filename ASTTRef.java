@@ -1,3 +1,5 @@
+import java.util.Set;
+
 public class ASTTRef implements ASTType {
 
     private ASTType type;
@@ -9,6 +11,14 @@ public class ASTTRef implements ASTType {
         if (other instanceof ASTTRef) {
             ASTTRef otherRef = (ASTTRef) other;
             return this.type.isSubtypeOf(otherRef.getType(), env) && otherRef.getType().isSubtypeOf(this.type, env);
+        } else if (other instanceof ASTTId) {
+            ASTTId otherId = (ASTTId) other;
+            try {
+                other = env.find(otherId.toStr());
+            } catch (InterpreterError ex) {
+                return false;
+            }
+            return this.isSubtypeOf(other, env);
         }
         return false;
     }
@@ -20,8 +30,8 @@ public class ASTTRef implements ASTType {
         return "ref<"+type.toStr()+">";
     }
 
-    public ASTType simplify(Environment<ASTType> env) {
-        ASTType simplifiedType = type.simplify(env);
+    public ASTType simplify(Environment<ASTType> env, Set<String> simplified) throws InterpreterError {
+        ASTType simplifiedType = type.simplify(env, simplified);
         return new ASTTRef(simplifiedType);
     }
 

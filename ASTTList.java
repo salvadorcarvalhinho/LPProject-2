@@ -1,29 +1,39 @@
-public class ASTTList implements ASTType {
-    private ASTType elt;
+import java.util.Set;
 
-    public ASTTList(ASTType eltt)
+public class ASTTList implements ASTType {
+    private ASTType elementType;
+
+    public ASTTList(ASTType elementTypet)
     {
-        elt = eltt;
+        elementType = elementTypet;
     }
 
     public ASTType getElementType() {
-        return elt;
+        return elementType;
     }
 
     public boolean isSubtypeOf(ASTType other, Environment<ASTType> env) {
         if (other instanceof ASTTList) {
             ASTTList otherList = (ASTTList) other;
-            return this.elt.isSubtypeOf(otherList.elt, env);
+            return this.elementType.isSubtypeOf(otherList.elementType, env);
+        } else if (other instanceof ASTTId) {
+            ASTTId otherId = (ASTTId) other;
+            try {
+                other = env.find(otherId.toStr());
+            } catch (InterpreterError ex) {
+                return false;
+            }
+            return this.isSubtypeOf(other, env);
         }
         return false;
     }
     
     public String toStr() {
-        return "list<"+elt.toStr()+">";
+        return "list<"+elementType.toStr()+">";
     }
 
-    public ASTType simplify(Environment<ASTType> env) {
-        ASTType simplifiedElt = elt.simplify(env);
-        return new ASTTList(simplifiedElt);
+    public ASTType simplify(Environment<ASTType> env, Set<String> simplified) throws InterpreterError {
+        ASTType simplifiedElementType = elementType.simplify(env, simplified);
+        return new ASTTList(simplifiedElementType);
     }    
 }

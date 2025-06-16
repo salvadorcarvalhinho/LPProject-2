@@ -1,3 +1,5 @@
+import java.util.Set;
+
 public class ASTTInt implements ASTType {
     
     public String toStr() {
@@ -10,7 +12,7 @@ public class ASTTInt implements ASTType {
         return false;
     }
 
-    public ASTType simplify(Environment<ASTType> env) {
+    public ASTType simplify(Environment<ASTType> env, Set<String> simplified) throws InterpreterError {
         return this;
     }
 }

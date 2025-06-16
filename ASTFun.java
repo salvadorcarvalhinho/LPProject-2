@@ -1,3 +1,5 @@
+import java.util.HashSet;
+
 public class ASTFun implements ASTNode {
     private String arg;
     private ASTType arg_type;
@@ -19,7 +21,11 @@ public class ASTFun implements ASTNode {
 
     public ASTType typeCheck(Environment<ASTType> env) throws TypeCheckError { // Γ ⊢ λx:A.M : A → B
         Environment<ASTType> newEnv = env.beginScope();
-        arg_type = arg_type.simplify(newEnv);
+        try {
+            arg_type = arg_type.simplify(newEnv, new HashSet<>());
+        } catch (InterpreterError e) {
+            throw new TypeCheckError("Error simplifying argument type: " + e.getMessage());
+        }
         try {
             newEnv.assoc(arg, arg_type); // Γ, x:A
         } catch (InterpreterError e) {

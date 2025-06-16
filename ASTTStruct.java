@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.Set;
+
 public class ASTTStruct implements ASTType {
 
     private TypeBindList ll;
@@ -50,9 +53,14 @@ public class ASTTStruct implements ASTType {
         return strBuilder.toString();
     }
 
-    public ASTType simplify(Environment<ASTType> env) {
-        TypeBindList simplifiedFields = ll.simplify(env);
-        return new ASTTStruct(simplifiedFields);
+    public ASTType simplify(Environment<ASTType> env, Set<String> simplified) throws InterpreterError {
+        for (String field : ll.getFields()) {
+            ASTType fieldType = ll.get(field);
+            ASTType simplifiedFieldType = fieldType.simplify(env, new HashSet<String>(simplified));
+            ll.set(field, simplifiedFieldType);
+        }
+
+        return this;
     }
 
 }
